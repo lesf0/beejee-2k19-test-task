@@ -24,7 +24,7 @@ class DB {
 		return $dbh;
 	}
 
-	public static function exec($querystring, $values = [])
+	public static function exec($querystring, $values = [], $table = '')
 	{
 		$dbh = DB::getPDO();
 
@@ -36,7 +36,7 @@ class DB {
 
 		$stmt->execute();
 
-		return $dbh->lastInsertId('id');
+		return $dbh->lastInsertId($table . '_id_seq');
 	}
 
 	public static function query($querystring, $values = [])

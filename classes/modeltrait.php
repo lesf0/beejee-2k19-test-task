@@ -27,6 +27,11 @@ trait modelTrait {
 		}
 	}
 
+	public function jsonSerialize()
+	{
+		return $this->values;
+	}
+
 	public function save()
 	{
 		$table = static::table;
@@ -57,7 +62,7 @@ trait modelTrait {
 
 			$querystring = "INSERT INTO $table($keys_list) VALUES($keys_ph)";
 
-			$id = DB::exec($querystring, $this->values);
+			$id = DB::exec($querystring, $this->values, $table);
 
 			$this->values['id'] = $id;
 		}

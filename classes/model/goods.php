@@ -1,7 +1,7 @@
 <?php
 
 namespace Model{
-class Goods {
+class Goods implements \JsonSerializable {
 	use \ModelTrait;
 
 	const table	= 'goods';

@@ -2,6 +2,7 @@
 
 define("ROOT",__DIR__);
 define("CLASS_DIR", ROOT . '/classes');
+define("LAYOUT_DIR", ROOT . '/layout');
 
 // Autoload:
 
@@ -15,12 +16,6 @@ require('conf.php');
 
 // Route:
 
-$good = new \Model\Goods();
-$good->name = 'Big Beautiful Car';
-$good->price = 1000000000.99;
-
-$good->save();
-
-var_dump(\Model\Goods::all());
+\Controller\Goods::Create();
 
 ?>
