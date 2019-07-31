@@ -14,8 +14,57 @@ spl_autoload_register();
 
 require('conf.php');
 
-// Route:
+// Routes:
+// TODO : Better router
 
-\Controller\Orders::Create([1,2,3]);
+function p404()
+{
+	http_response_code(404);
+	View\Json::render(['error'=>'page not found']);
+}
+function p500($error)
+{
+	http_response_code(500);
+	View\Json::render(['error'=>$error.'']);
+}
+
+try {
+	if(count($_POST) && array_key_exists('method', $_POST)){
+		$uri = $_SERVER['REQUEST_URI'];
+		$method = $_POST['method'];
+
+		if ($uri == '/goods' && $method == 'create')
+		{
+			Controller\Goods::Create($_POST['n']);
+		} else
+		if ($uri == '/goods' && $method == 'get')
+		{
+			Controller\Goods::Get();
+		} else
+		if ($uri == '/orders' && $method == 'create')
+		{
+			Controller\Orders::Create($_POST['goods']);
+		} else
+		if ($uri == '/orders' && $method == 'update')
+		{
+			Controller\Orders::Update($_POST['id'], $_POST['price']);
+		} else
+		{
+			p404();
+		}
+	}
+	else
+	{
+		p404();
+	}
+}
+catch(Exception $error)
+{
+	p500($error);
+}
+catch(Error $error)
+{
+	p500($error);
+}
 
 ?>

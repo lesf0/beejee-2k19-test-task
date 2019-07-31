@@ -9,21 +9,21 @@ class Orders implements \JsonSerializable {
 
 	public function price()
 	{
-		$querystring = 'SELECT SUM(g.price) as price FROM order_goods AS og JOIN goods AS g ON og.g_id = g.id WHERE o.id = :id';
+		$querystring = 'SELECT SUM(g.price) AS price FROM order_goods AS og JOIN goods AS g ON og.g_id = g.id WHERE og.o_id = :id';
 
-		$res = DB::query($querystring, $this->values);
+		$res = \DB::query($querystring, ['id'=>$this->values['id']]);
 
-		if (len($res) == 0)
+		if (count($res) == 0)
 		{
-			return 0;
+			return -1;
 		}
-		else if (len($res) == 0)
+		else if (count($res) == 1)
 		{
 			return $res[0]['price'];
 		}
 		else
 		{
-			throw new LogicException("Something is totally wrong in the database", 1);
+			throw new \LogicException("Something is totally wrong in the database", 1);
 		}
 	}
 }}
