@@ -16,6 +16,6 @@ require('conf.php');
 
 // Route:
 
-\Controller\Goods::Create();
+\Controller\Orders::Create([1,2,3]);
 
 ?>
