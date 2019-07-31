@@ -8,7 +8,7 @@ class DB {
 
 	protected static $dbh = null;
 
-	protected static function getPDO()
+	public static function getPDO()
 	{
 		$dbh = DB::$dbh;
 	
@@ -24,18 +24,30 @@ class DB {
 		return $dbh;
 	}
 
-	public static function exec($querystring)
+	public static function exec($querystring, $values = [])
 	{
 		$dbh = DB::getPDO();
 
-		$stmt = $dbh->exec($querystring);
+		$stmt = $dbh->prepare($querystring);
+
+		foreach ($values as $key => $value) {
+			$stmt->bind(':'.$key, $value);
+		}
+
+		$stmt->execute();
 	}
 
-	public static function query($querystring)
+	public static function query($querystring, $values = [])
 	{
 		$dbh = DB::getPDO();
 
-		$stmt = $dbh->query($querystring);
+		$stmt = $dbh->prepare($querystring);
+
+		foreach ($values as $key => $value) {
+			$stmt->bindValue(':'.$key, $value);
+		}
+
+		$stmt->execute();
 		$stocks = [];
 		while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
 			$stocks[] = $row;

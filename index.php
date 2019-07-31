@@ -15,6 +15,6 @@ require('conf.php');
 
 // Route:
 
-var_dump(DB::query('select * from countries'));
+var_dump(DB::query('select * from countries where id=:id', ['id'=>1]));
 
 ?>
