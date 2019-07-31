@@ -31,10 +31,12 @@ class DB {
 		$stmt = $dbh->prepare($querystring);
 
 		foreach ($values as $key => $value) {
-			$stmt->bind(':'.$key, $value);
+			$stmt->bindValue(':'.$key, $value);
 		}
 
 		$stmt->execute();
+
+		return $dbh->lastInsertId('id');
 	}
 
 	public static function query($querystring, $values = [])

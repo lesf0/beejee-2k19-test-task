@@ -15,6 +15,12 @@ require('conf.php');
 
 // Route:
 
-var_dump(DB::query('select * from countries where id=:id', ['id'=>1]));
+$good = new \Model\Goods();
+$good->name = 'Big Beautiful Car';
+$good->price = 1000000000.99;
+
+$good->save();
+
+var_dump(\Model\Goods::all());
 
 ?>
