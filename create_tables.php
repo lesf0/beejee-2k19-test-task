@@ -13,13 +13,33 @@ spl_autoload_register();
 
 require('conf.php');
 
-// Script:
+// Migrate:
 
-DB::exec('DROP TABLE order_goods');
-DB::exec('DROP TABLE orders');
-DB::exec('DROP TABLE goods');
-DB::exec('CREATE TABLE IF NOT EXISTS goods (id SERIAL PRIMARY KEY,name varchar,price decimal)');
-DB::exec('CREATE TABLE IF NOT EXISTS orders (id SERIAL PRIMARY KEY,status boolean default FALSE,user_id integer not null)');
-DB::exec('CREATE TABLE IF NOT EXISTS order_goods (id SERIAL PRIMARY KEY,g_id integer not null, o_id integer not null, FOREIGN KEY (g_id) REFERENCES goods (id), FOREIGN KEY (o_id) REFERENCES orders (id))');
+DB::exec('DROP TABLE problems');
+DB::exec('DROP TABLE users');
+DB::exec('CREATE TABLE IF NOT EXISTS problems (
+			id SERIAL PRIMARY KEY,
+			name varchar NOT NULL,
+			email varchar NOT NULL,
+			descr text NOT NULL,
+			edited boolean NOT NULL DEFAULT false
+		)');
+DB::exec('CREATE TABLE IF NOT EXISTS users (
+			id SERIAL PRIMARY KEY,
+			name varchar UNIQUE NOT NULL,
+			password varchar NOT NULL,
+			is_admin boolean DEFAULT false
+		)');
+
+// Seed:
+
+DB::exec("INSERT INTO problems(name,email,descr) VALUES
+			('Вася', 'vasya@ma.il', '2+2=?'),
+			('Петя', 'petya@ma.il', 'int(log(xdx))'),
+			('Иннокентий Петрович', 'innokentiy.petrovich.1963.gorod.volgograd@nauchno-issledovatelskiy-institut-himicheskih-udobreniy-i-yadov.gov.ru', 'Что в чёрном ящике?'),
+			('Серёжа', 'serj@ma.il', 'А ты любишь мамбу?')
+		");
+DB::exec("INSERT INTO users(name,password,is_admin) VALUES (:name,:password,true)",
+			['name'=>'admin','password'=>md5('the_saltiest_salt'.'123')])
 
 ?>

@@ -14,6 +14,10 @@ spl_autoload_register();
 
 require('conf.php');
 
+// Session stuff
+
+session_start();
+
 // Routes:
 // TODO : Better router
 
@@ -30,30 +34,43 @@ function p500($error)
 
 try {
 	if(count($_POST) && array_key_exists('method', $_POST)){
-		$uri = $_SERVER['REQUEST_URI'];
 		$method = $_POST['method'];
-
-		if ($uri == '/goods' && $method == 'create')
-		{
-			Controller\Goods::Create($_POST['n']);
-		} else
-		if ($uri == '/goods' && $method == 'get')
-		{
-			Controller\Goods::Get();
-		} else
-		if ($uri == '/orders' && $method == 'create')
-		{
-			Controller\Orders::Create($_POST['goods']);
-		} else
-		if ($uri == '/orders' && $method == 'update')
-		{
-			Controller\Orders::Update($_POST['id'], $_POST['price']);
-		} else
-		{
-			p404();
-		}
 	}
 	else
+	{
+		$method = 'get';
+	}
+
+	$uri = explode('?', $_SERVER['REQUEST_URI'], 2)[0];
+
+	if ($uri == '/' && $method == 'get')
+	{
+		Controller\Problems::Get($_GET['p'] ?? 0);
+	} else
+	if ($uri == '/login' && $method == 'get')
+	{
+		Controller\Users::Login();
+	} else
+	if ($uri == '/login' && $method == 'put')
+	{
+		Controller\Users::Check($_POST['name'], $_POST['password']);
+	} else
+	if ($uri == '/add' && $method == 'get')
+	{
+		Controller\Problems::Add();
+	} else
+	if ($uri == '/create' && $method == 'create')
+	{
+		Controller\Problems::Create($_POST['name'], $_POST['email'], $_POST['descr']);
+	} else
+	if (preg_match("/\/edit\/(\d+)/", $uri, $matches) && $method == 'get')
+	{
+		Controller\Problems::Edit($matches[1]);
+	} else
+	if (preg_match("/\/update\/(\d+)/", $uri, $matches) && $method == 'update')
+	{
+		Controller\Problems::Update($matches[1], $_POST['name'], $_POST['email'], $_POST['descr']);
+	} else
 	{
 		p404();
 	}

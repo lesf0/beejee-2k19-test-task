@@ -87,13 +87,26 @@ trait modelTrait {
 		return $res;
 	}
 
-	public static function all()
+	public static function all($offset = null, $limit = null)
 	{
 		$table = static::table;
 
-		$querystring = "SELECT * FROM $table";
+		$querystring = "SELECT * FROM $table ORDER BY id LIMIT :limit OFFSET :offset";
 
-		return static::query($querystring);
+		return static::query($querystring, ['offset'=>$offset, 'limit'=>$limit]);
+	}
+
+	public static function count()
+	{
+		$table = static::table;
+
+		$querystring = "SELECT COUNT(*) FROM $table";
+
+		$raw = DB::query($querystring);
+
+		$first = reset($raw);
+
+		return reset($first);
 	}
 }
 
