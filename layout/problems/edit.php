@@ -15,6 +15,10 @@
 					<label for="problem_descr">Текст задачи</label>
 					<textarea class="form-control" id="problem_descr" name="descr" rows="3" required><?= $problem->descr ?></textarea>
 				</div>
+				<div class="form-group form-check">
+					<input type="checkbox" class="form-check-input" id="problem_completed" name="completed"<?= $problem->completed ? ' checked' : '' ?>>
+					<label class="form-check-label" for="problem_completed">Выполнено</label>
+				</div>
 				<input type="hidden" name="method" value="update">
 				<button type="submit" class="btn btn-primary">Отправить</button>
 			</form>

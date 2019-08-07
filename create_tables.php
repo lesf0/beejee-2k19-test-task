@@ -22,7 +22,8 @@ DB::exec('CREATE TABLE IF NOT EXISTS problems (
 			name varchar NOT NULL,
 			email varchar NOT NULL,
 			descr text NOT NULL,
-			edited boolean NOT NULL DEFAULT false
+			edited boolean NOT NULL DEFAULT false,
+			completed boolean NOT NULL DEFAULT false
 		)');
 DB::exec('CREATE TABLE IF NOT EXISTS users (
 			id SERIAL PRIMARY KEY,

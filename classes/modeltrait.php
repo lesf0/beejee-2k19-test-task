@@ -87,11 +87,11 @@ trait modelTrait {
 		return $res;
 	}
 
-	public static function all($offset = null, $limit = null)
+	public static function all($offset = null, $limit = null, $order = 1)
 	{
 		$table = static::table;
 
-		$querystring = "SELECT * FROM $table ORDER BY id LIMIT :limit OFFSET :offset";
+		$querystring = "SELECT * FROM $table ORDER BY $order LIMIT :limit OFFSET :offset";
 
 		return static::query($querystring, ['offset'=>$offset, 'limit'=>$limit]);
 	}

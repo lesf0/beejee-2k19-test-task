@@ -9,6 +9,14 @@
 			<? endif; ?>
 		</div>
 	</div>
+	<div class="row mt-4">
+		<div class="col-12">
+			Сортировать по:
+			<a class="btn btn-link" href="/?p=<?= $page ?>&o=name" role="button">Имя</a>
+			<a class="btn btn-link" href="/?p=<?= $page ?>&o=email" role="button">Email</a>
+			<a class="btn btn-link" href="/?p=<?= $page ?>&o=completed" role="button">Статус</a>
+		</div>
+	</div>
 	<div class="row mb-4">
 		<? foreach ($problems as $problem): ?>
 		<div class="col-4 col-md-6 col-sm-12 mt-4">
@@ -19,6 +27,9 @@
 					<p class="card-text"><?= $problem->descr ?></p>
 					<? if($problem->edited): ?>
 					<p class="card-text text-muted">отредактировано администратором ✔</p>
+					<? endif; ?>
+					<? if($problem->completed): ?>
+					<p class="card-text text-muted">выполнено администратором ✔</p>
 					<? endif; ?>
 					<? if(array_key_exists('user', $_SESSION) && $_SESSION['user']->is_admin): ?>
 					<a href="/edit/<?= $problem->id ?>" class="card-link">Редактировать задачу</a>

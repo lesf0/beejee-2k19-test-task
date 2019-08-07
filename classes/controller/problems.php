@@ -2,9 +2,27 @@
 
 namespace Controller{
 class Problems {
-	public static function Get($page = 0)
+	public static function Get($page = 0, $order = null)
 	{
-		$all = \Model\Problems::all($page * 3, 3);
+		if (is_null($order) || !filter_var($order, FILTER_VALIDATE_REGEXP, ['options'=>['regexp'=>'/^\w+$/']]))
+		{
+			if (array_key_exists('problem_order', $_SESSION))
+			{
+				$order = $_SESSION['problem_order'];
+			}
+			else
+			{
+				$order = 1;
+			}
+		}
+		elseif (array_key_exists('problem_order', $_SESSION) && $order == $_SESSION['problem_order'])
+		{
+			$order = $order . ' DESC';
+		}
+
+		$_SESSION['problem_order'] = $order;
+
+		$all = \Model\Problems::all($page * 3, 3, $order);
 
 		$total = \ceil(\Model\Problems::count() / 3);
 
@@ -62,7 +80,7 @@ class Problems {
 		header('Location: /');
 	}
 
-	public static function Update($id, $name, $email, $descr)
+	public static function Update($id, $name, $email, $descr, $completed)
 	{
 		if (empty($name) || empty($email) || empty($descr))
 		{
@@ -81,6 +99,7 @@ class Problems {
 		$problem->name = htmlspecialchars($name);
 		$problem->email = htmlspecialchars($email);
 		$problem->descr = htmlspecialchars($descr);
+		$problem->completed = $completed;
 
 		$problem->edited = true;
 

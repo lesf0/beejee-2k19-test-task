@@ -45,7 +45,7 @@ try {
 
 	if ($uri == '/' && $method == 'get')
 	{
-		Controller\Problems::Get($_GET['p'] ?? 0);
+		Controller\Problems::Get($_GET['p'] ?? 0, $_GET['o'] ?? null);
 	} else
 	if ($uri == '/login' && $method == 'get')
 	{
@@ -69,7 +69,7 @@ try {
 	} else
 	if (preg_match("/\/update\/(\d+)/", $uri, $matches) && $method == 'update')
 	{
-		Controller\Problems::Update($matches[1], $_POST['name'], $_POST['email'], $_POST['descr']);
+		Controller\Problems::Update($matches[1], $_POST['name'], $_POST['email'], $_POST['descr'], (int)array_key_exists('completed', $_POST));
 	} else
 	{
 		p404();
